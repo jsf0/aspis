@@ -1,0 +1,73 @@
+.\"
+.\"Copyright (c) 2020 Joseph Fierro <joseph.fierro@logosnetworks.com>
+.\"
+.\"Permission to use, copy, modify, and distribute this software for any
+.\"purpose with or without fee is hereby granted, provided that the above
+.\"copyright notice and this permission notice appear in all copies.
+.\"
+.\"THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\"ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\"ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\"OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd $Mdocdate: May 9 2020 $
+.Dt ASPIS 1
+.Os
+.Sh NAME
+.Nm aspis
+.Nd Encryption filter utility
+.Sh SYNOPSIS
+.Nm aspis
+.Fl h 
+.Nm aspis
+.Op Fl n
+.Op Fl o Ar ops
+.Op Fl m Ar memory
+.Op Fl p Ar public_key
+.Op Fl k Ar private_key
+.Fl e
+.Fl d
+.Fl g
+.Sh DESCRIPTION
+.Nm
+is an encryption utility that encrypts anything it reads from stdin and sends the ciphertext to 
+stdout in JSON format. It relies on Libsodium (via RbNaCl) for its crypto primitives.
+
+The following options select the operation:
+.Bl -tag -width Dsssigfile
+.It Fl h
+Print out usage information and exit
+.It Fl n
+The nopass option. Looks for passphrases in the environment variable ASPIS_PASS
+instead of asking for them on the command line. This is useful for embedding
+.Nm
+in scripts, but is less secure. It is recommended to disable shell history when using
+this feature to prevent something like "export ASPIS_PASS=p@ssw0rd" from being written
+to your shell's history file.
+.It Fl e
+Encrypt. Data will be read from stdin, and encrypted with XSalsa20-Poly1305
+with a key derived via Argon2i. Ciphertext and the header info will be sent to stdout
+in JSON format. 
+.It Fl d
+Decrypt.
+.It Fl g
+Generate new key pair. This will look for the directory ~/.aspis, create it if necessary,
+and create the files "public_key" and "private_key" there. The public_key can be freely distributed.
+.Nm
+will read from stdin and write the plaintext to stdout. 
+.It Fl o Ar ops
+The ops parameter (number of iterations) for Argon2i. The default is 10, and minimum is 3.
+.It Fl m Ar memory
+The memory to be consumed by Argon2i, in MiB. Default is 1024, and minimum is 64.
+.It Fl p Ar public_key
+When encrypting, the recipient's public key. When decrypting a message sent to you, the sender's public key.
+.It Fl k Ar private_key
+Your private key. If this option is omitted,
+.Nm
+will look in the ~/.aspis directory for a file called "private_key" and use that by default.
+.El
+.Pp
+.Sh AUTHOR
+Joseph Fierro <joseph.fierro@logosnetworks.com>
