@@ -15,10 +15,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 require 'optparse'
 
-require_relative 'asymmetric_encrypt.rb'
-require_relative 'asymmetric_decrypt.rb'
-require_relative 'symmetric_encrypt.rb'
-require_relative 'symmetric_decrypt.rb'
+require_relative 'asymmetric.rb'
+require_relative 'symmetric.rb'
 require_relative 'generate_keys.rb'
 require_relative 'version.rb'
 
@@ -84,15 +82,15 @@ module AspisInit
     case options[:mode]
     when 'encrypt'
       if options[:public_key]
-        puts AsymmetricEncrypt.encrypt(ARGF.read, options[:public_key], options[:private_key], options[:ask_pass])
+        puts Asymmetric.encrypt(ARGF.read, options[:public_key], options[:private_key], options[:ask_pass])
       else
-        puts SymmetricEncrypt.encrypt(ARGF.read, options[:opslimit], options[:memlimit], options[:ask_pass])
+        puts Symmetric.encrypt(ARGF.read, options[:opslimit], options[:memlimit], options[:ask_pass])
       end
     when 'decrypt'
       if options[:public_key]
-        puts AsymmetricDecrypt.decrypt(ARGF.read, options[:public_key], options[:private_key], options[:ask_pass])
+        puts Asymmetric.decrypt(ARGF.read, options[:public_key], options[:private_key], options[:ask_pass])
       else
-        puts SymmetricDecrypt.decrypt(ARGF.read, options[:ask_pass])
+        puts Symmetric.decrypt(ARGF.read, options[:ask_pass])
       end
     when 'generate'
       GenerateKeys.generate(options[:opslimit], options[:memlimit], options[:ask_pass])

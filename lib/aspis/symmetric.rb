@@ -5,7 +5,7 @@ require 'json'
 require 'base64'
 require 'io/console'
 
-module SymmetricEncrypt
+module Symmetric
   def self.timingsafe_compare(secret1, secret2)
     check = secret1.bytesize ^ secret2.bytesize
     secret1.bytes.zip(secret2.bytes) { |x, y| check |= x ^ y.to_i }
@@ -58,5 +58,36 @@ module SymmetricEncrypt
                ciphertext: ciphertext }
 
     JSON.generate(output)
+  end
+
+def self.decrypt(input, ask_pass)
+    input = JSON.parse(input)
+
+    salt = input['salt']
+    salt = Base64.decode64(salt)
+
+    ops = input['ops']
+    mem = input['mem']
+    key_size = input['key_size']
+
+    ciphertext = input['ciphertext']
+    ciphertext = Base64.decode64(ciphertext)
+
+    password = if ask_pass == false
+                 ENV['ASPIS_PASS']
+               else
+                 IO.console.getpass 'Enter passphrase: '
+               end 
+
+    key = RbNaCl::PasswordHash.argon2i(
+      password,
+      salt,
+      ops,
+      mem,
+      key_size
+    )   
+
+    box = RbNaCl::SimpleBox.from_secret_key(key)
+    box.decrypt(ciphertext)
   end
 end

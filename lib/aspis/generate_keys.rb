@@ -4,7 +4,7 @@ require 'rbnacl'
 require 'fileutils'
 require 'base64'
 
-require_relative 'symmetric_encrypt.rb'
+require_relative 'symmetric.rb'
 
 module GenerateKeys
   def self.generate(opslimit, memlimit, ask_pass)
@@ -16,7 +16,7 @@ module GenerateKeys
     public_key = Base64.strict_encode64(public_key)
 
     # Encrypt private key before writing to disk
-    private_key = SymmetricEncrypt.encrypt(private_key, opslimit, memlimit, ask_pass)
+    private_key = Symmetric.encrypt(private_key, opslimit, memlimit, ask_pass)
 
     File.write(aspis_dir + '/private_key', private_key)
     File.write(aspis_dir + '/public_key', public_key)
