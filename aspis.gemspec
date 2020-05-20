@@ -9,8 +9,10 @@ Gem::Specification.new do |spec|
   spec.version       = Aspis::VERSION
   spec.authors       = ['Joseph Fierro']
   spec.email         = ['joseph.fierro@logosnetworks.com']
-  spec.cert_chain       = ['certs/jsfierro.pem']
-  spec.signing_key      = File.expand_path("~/.ssh/gem-private_key.pem") if $0 =~ /gem\z/
+  spec.cert_chain = ['certs/jsfierro.pem']
+  if $PROGRAM_NAME =~ /gem\z/
+    spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
+  end
 
   spec.summary       = 'command line encryption tool using rbnacl'
   spec.homepage      = 'https://github.com/jsfierro/aspis'

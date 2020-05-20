@@ -60,7 +60,7 @@ module Symmetric
     JSON.generate(output)
   end
 
-def self.decrypt(input, ask_pass)
+  def self.decrypt(input, ask_pass)
     input = JSON.parse(input)
 
     salt = input['salt']
@@ -77,7 +77,7 @@ def self.decrypt(input, ask_pass)
                  ENV['ASPIS_PASS']
                else
                  IO.console.getpass 'Enter passphrase: '
-               end 
+               end
 
     key = RbNaCl::PasswordHash.argon2i(
       password,
@@ -85,9 +85,9 @@ def self.decrypt(input, ask_pass)
       ops,
       mem,
       key_size
-    )   
+    )
 
     box = RbNaCl::SimpleBox.from_secret_key(key)
     box.decrypt(ciphertext)
-  end
+    end
 end

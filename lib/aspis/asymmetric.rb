@@ -23,7 +23,7 @@ module Asymmetric
     output = { version: Aspis::VERSION,
                ciphertext: ciphertext }
     JSON.generate(output)
-  end 
+  end
 
   def self.decrypt(input, public_key, private_key, ask_pass)
     sender_public_key = File.read(public_key)
