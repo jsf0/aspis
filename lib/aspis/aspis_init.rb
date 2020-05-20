@@ -24,7 +24,7 @@ module AspisInit
   def self.init
     options = {}
     OptionParser.new do |opts|
-      opts.banner = "Encryption filter utility.\n"
+      opts.banner = "Encryption utility.\n"
 
       opts.version = Aspis::VERSION
 
