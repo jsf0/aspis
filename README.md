@@ -11,24 +11,14 @@ It relies on Libsodium (via RbNaCl) for its cryptographic primitives. Output is 
 ### Setup
 aspis requires Libsodium and the Ruby gem RbNaCl.
 
-To improve security, aspis is cryptographically signed. 
-It is strongly encouraged to verify this signature before installing the 
-aspis gem.
-
-First, add my cert:
+To use, install the gem:
 ```
-gem cert --add <(curl -Ls https://raw.github.com/jsfierro/aspis/certs/jsfierro.pem)
+gem install aspis
 ```
-Then install the gem:
-```
-gem install aspis -P MediumSecurity
-```
-"MediumSecurity" will verify the signature on aspis, but not its dependencies in case they are
-not signed. "HighSecurity" will require signatures on all dependencies as well. 
 
 Or to build and install from Github:
 ```
-$ git clone https://github.com/jsfierro/aspis
+$ git clone https://gitlab.com/jsaf/aspis
 $ cd aspis
 # bundle exec rake install
 ```
